@@ -1,5 +1,3 @@
-Viewed basic-07-unit-async-webserver.html:1-387
-
 針對 **`basic-07-unit-async-webserver` (ESP32 Web Server 函式庫入門)** 單元，這是學員從「硬體開發」跨入「嵌入式網頁工程」的技術分嶺嶺。它要求學員具備 **事件驅動 (Event-Driven)** 與 **解耦設計 (Decoupling)** 的思維，學習如何利用 C++ Lambda 語法與範本引擎 (Template Engine)，在不阻塞馬達控制循環的前提下，打造一個具備即時互動能力的 Web 儀表板。
 
 以下是在 **GitHub Classroom** 部署其作業 (Assignments) 的具體建議：
