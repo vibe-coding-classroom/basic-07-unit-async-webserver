@@ -1,0 +1,54 @@
+name: GitHub Classroom Workflow
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  build:
+    name: Autograding
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v4
+        with:
+          path: ~/.platformio
+          key: ${{ runner.os }}-platformio
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install PlatformIO
+        run: |
+          python -m pip install --upgrade pip
+          pip install platformio
+
+      - name: Run PlatformIO Build
+        run: pio run
+
+      - name: Code Logic Check
+        run: |
+          echo "Checking for essential Async Server components..."
+          grep -q "ESPAsyncWebServer" platformio.ini || (echo "Error: ESPAsyncWebServer missing in platformio.ini" && exit 1)
+          grep -q "hasParam" src/main.cpp || (echo "Error: Missing parameter safety check (hasParam) in main.cpp" && exit 1)
+          grep -q "processor" src/main.cpp || (echo "Error: Missing template processor in main.cpp" && exit 1)
+          echo "Logic checks passed!"
